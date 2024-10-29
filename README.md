@@ -57,7 +57,7 @@ To see the contents of a specific table, use:
 ```sql
 SELECT * FROM elements;
 SELECT * FROM properties;
-SELECT * FROM types; 
+SELECT * FROM types;
 ```
 
 ## SQL Database Queries
@@ -200,13 +200,27 @@ This project maintains a clear commit history to track changes and updates made 
                           +-------------------+
 ```
 
-Primary Key (PK):
+**Primary Key (PK):**
 
 - A primary key is a unique identifier for a record in a table. In the Elements table, the id column is the primary key. In the Properties table, the id column is the primary key. In the Types table, the id column is the primary key.
 
-Foreign Key (FK):
+**Foreign Key (FK):**
 
 - A foreign key is a field in one table that uniquely identifies a row of another table. In the Properties table, the element_id column is a foreign key that references the id column in the Elements table.
+
+## Script Descriptions
+
+In the Periodic Table Database Project, the element.sh and fix_database.sh scripts serve distinct but complementary purposes:
+
+**element.sh:**
+
+- **Purpose:** This script is the main query tool for the database, designed to retrieve information about elements from the periodic table database. When executed, it typically prompts the user to input an element (by symbol, atomic number, or name) and then outputs relevant information (e.g., atomic weight, type, properties) based on the user’s query.
+- **Functionality:** It uses SQL commands within a shell environment to query the database and retrieve specific data from tables like elements, properties, and types, displaying details about each element in a structured format.
+
+**fix_database.sh:**
+
+- **Purpose:** This script is intended to perform any initial setup or modifications needed to ensure the database structure and data align with expected standards or project requirements. It prepares the database by creating or updating tables, inserting missing records, and fixing data inconsistencies, which makes sure that element.sh can access and query the data without issues.
+- **Functionality:** It often includes SQL statements to adjust the schema, fix table relationships, and populate missing data entries. Running this script before element.sh is essential, as it establishes a reliable and consistent database state.
 
 ## Acknowledgments
 

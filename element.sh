@@ -8,11 +8,22 @@
 # -c: Execute the following command
 PSQL="psql -X --username=freecodecamp --dbname=periodic_table --tuples-only -c"
 
+# Function to echo the contents of a table
+echo_table() {
+  TABLE_NAME=$1
+  echo "Contents of the $TABLE_NAME table:"
+  $PSQL "SELECT * FROM $TABLE_NAME;"
+}
+
 # Main function to handle the program logic
 MAIN_PROGRAM() {
   # Check if an argument is provided
   if [[ -z $1 ]]
   then
+
+    # Echo the contents of the 'elements' table
+    echo_table "elements"
+
     # If no argument is provided, prompt the user to provide an element
     echo "Please provide an element as an argument."
   else
@@ -72,6 +83,8 @@ PRINT_ELEMENT() {
 
 # Function to fix the database schema and data
 FIX_DB() {
+  echo "Fixing database..."
+
   # Rename the weight column to atomic_mass in the properties table
   RENAME_PROPERTIES_WEIGHT=$($PSQL "ALTER TABLE properties RENAME COLUMN weight TO atomic_mass;")
   echo "RENAME_PROPERTIES_WEIGHT: $RENAME_PROPERTIES_WEIGHT"
@@ -163,6 +176,8 @@ FIX_DB() {
   # Drop the type column from the properties table
   DELETE_COLUMN_PROPERTIES_TYPE=$($PSQL "ALTER TABLE properties DROP COLUMN type;")
   echo "DELETE_COLUMN_PROPERTIES_TYPE: $DELETE_COLUMN_PROPERTIES_TYPE"
+
+  echo "End of fixing database..."
 }
 
 # Function to start the program
