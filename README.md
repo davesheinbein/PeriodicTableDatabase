@@ -270,17 +270,17 @@ Purpose: The primary key enforces entity integrity by ensuring that each record 
 
 ## Script Descriptions
 
-In the Periodic Table Database Project, the element.sh and fix_database.sh scripts serve distinct but complementary purposes:
+In the Periodic Table Database Project, the `element.sh` and `fix_database.sh` scripts serve distinct but complementary purposes:
 
-**element.sh:**
+**`element.sh`:**
 
 - **Purpose:** This script is the main query tool for the database, designed to retrieve information about elements from the periodic table database. When executed, it typically prompts the user to input an element (by symbol, atomic number, or name) and then outputs relevant information (e.g., atomic weight, type, properties) based on the user’s query.
 - **Functionality:** It uses SQL commands within a shell environment to query the database and retrieve specific data from tables like elements, properties, and types, displaying details about each element in a structured format.
 
-**fix_database.sh:**
+**`fix_database.sh`:**
 
-- **Purpose:** This script is intended to perform any initial setup or modifications needed to ensure the database structure and data align with expected standards or project requirements. It prepares the database by creating or updating tables, inserting missing records, and fixing data inconsistencies, which makes sure that element.sh can access and query the data without issues.
-- **Functionality:** It often includes SQL statements to adjust the schema, fix table relationships, and populate missing data entries. Running this script before element.sh is essential, as it establishes a reliable and consistent database state.
+- **Purpose:** This script is intended to perform any initial setup or modifications needed to ensure the database structure and data align with expected standards or project requirements. It prepares the database by creating or updating tables, inserting missing records, and fixing data inconsistencies, which makes sure that `element.sh` can access and query the data without issues.
+- **Functionality:** It often includes SQL statements to adjust the schema, fix table relationships, and populate missing data entries. Running this script before `element.sh` is essential, as it establishes a reliable and consistent database state.
 
 ---
 
