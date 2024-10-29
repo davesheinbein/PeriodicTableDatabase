@@ -2,7 +2,8 @@
 
 This project consists of a PostgreSQL database for a periodic table, along with a shell script to query element data. The repository includes SQL database queries, scripts for database initialization and querying, and documentation for setup and usage.
 
-This project is part of the [FreeCodeCamp Relational Database Certification](https://www.freecodecamp.org/learn/relational-database) and the [Periodic Table Database project](https://www.freecodecamp.org/learn/relational-database/build-a-periodic-table-database-project/build-a-periodic-table-database).
+This project is part of the [FreeCodeCamp Relational Database Certification](https://www.freecodecamp.org/learn/relational-database)
+[Periodic Table Database project](https://www.freecodecamp.org/learn/relational-database/build-a-periodic-table-database-project/build-a-periodic-table-database).
 
 ## Table of Contents
 
@@ -25,6 +26,7 @@ To set up the project, ensure you have PostgreSQL and Git installed on your mach
 
 ```bash
 git clone https://github.com/davesheinbein/PeriodicTableDatabase.git
+
 cd PeriodicTableDatabase
 ```
 
@@ -55,7 +57,7 @@ To see the contents of a specific table, use:
 ```sql
 SELECT * FROM elements;
 SELECT * FROM properties;
-SELECT * FROM types;
+SELECT * FROM types; 
 ```
 
 ## SQL Database Queries
@@ -119,7 +121,8 @@ git commit -m "chore: testing the program"
 This project maintains a clear commit history to track changes and updates made to the scripts and database structure.
 
 - **Initial commit**: Set up the Git repository.
-- **refactor**: Created shell scripts and granted executable permissions.
+- **refactor**: Created shell scripts and granted executable
+  permissions.
 - **fix**: Updated the database structure.
 - **chore**: Added main program functionality and testing.
 
@@ -153,7 +156,7 @@ This project maintains a clear commit history to track changes and updates made 
            v
 +--------------------+
 |Run Element Query   |
-|        Script      |
+|      Script        |
 +--------------------+
            |
            v
@@ -163,7 +166,7 @@ This project maintains a clear commit history to track changes and updates made 
            |
            v
 +--------------------+
-|   Commit Changes    |
+|   Commit Changes   |
 +--------------------+
            |
            v
@@ -180,20 +183,30 @@ This project maintains a clear commit history to track changes and updates made 
 +------------------+      +-------------------+
 | id (PK)          |<-----| id (PK)           |
 | symbol           |      | element_id (FK)   |
-| name             |      | atomic_weight      |
+| name             |      | atomic_weight     |
 | atomic_number    |      | density           |
-+------------------+      | melting_point      |
-                          | boiling_point      |
++------------------+      | melting_point     |
+                          | boiling_point     |
                           +-------------------+
-
-         +------------------+
-         |      Types       |
-         +------------------+
-         | id (PK)          |
-         | type_name        |
-         | color            |
-         +------------------+
+                                ^
+                                |
+                                |
+                          +-------------------+
+                          |      Types        |
+                          +-------------------+
+                          | id (PK)           |
+                          | type_name         |
+                          | color             |
+                          +-------------------+
 ```
+
+Primary Key (PK):
+
+- A primary key is a unique identifier for a record in a table. In the Elements table, the id column is the primary key. In the Properties table, the id column is the primary key. In the Types table, the id column is the primary key.
+
+Foreign Key (FK):
+
+- A foreign key is a field in one table that uniquely identifies a row of another table. In the Properties table, the element_id column is a foreign key that references the id column in the Elements table.
 
 ## Acknowledgments
 
