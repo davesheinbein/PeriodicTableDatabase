@@ -1,88 +1,91 @@
-#!/bin/bash
+  # You should rename the weight column to atomic_mass
+  RENAME_PROPERTIES_WEIGHT=$($PSQL "ALTER TABLE properties RENAME COLUMN weight TO atomic_mass;")
+  echo "RENAME_PROPERTIES_WEIGHT                    : $RENAME_PROPERTIES_WEIGHT"
 
-# Connect to PostgreSQL and set the PSQL variable for easier querying
-PSQL="psql --username=freecodecamp --dbname=periodic_table -t --no-align -c"
+  # You should rename the melting_point column to melting_point_celsius and the boiling_point column to boiling_point_celsius
+  RENAME_PROPERTIES_MELTING_POINT=$($PSQL"ALTER TABLE properties RENAME COLUMN melting_point TO melting_point_celsius;")
+  RENAME_PROPERTIES_BOILING_POINT=$($PSQL"ALTER TABLE properties RENAME COLUMN boiling_point TO boiling_point_celsius;")
+  echo "RENAME_PROPERTIES_MELTING_POINT             : $RENAME_PROPERTIES_MELTING_POINT"
+  echo "RENAME_PROPERTIES_BOILING_POINT             : $RENAME_PROPERTIES_BOILING_POINT"
 
-# Rename the 'weight' column to 'atomic_mass' in the properties table
-$PSQL "ALTER TABLE properties RENAME COLUMN weight TO atomic_mass;"
-echo "Renamed 'weight' column to 'atomic_mass'."
+  # Your melting_point_celsius and boiling_point_celsius columns should not accept null values
+  ALTER_PROPERTIES_MELTING_POINT_NOT_NULL=$($PSQL"ALTER TABLE properties ALTER COLUMN melting_point_celsius SET NOT NULL;")
+  ALTER_PROPERTIES_BOILING_POINT_NOT_NULL=$($PSQL "ALTER TABLE properties ALTER COLUMN boiling_point_celsius SET NOT NULL;")
+  echo "ALTER_PROPERTIES_MELTING_POINT_NOT_NULL     : $ALTER_PROPERTIES_MELTING_POINT_NOT_NULL"
+  echo "ALTER_PROPERTIES_BOILING_POINT_NOT_NULL     : $ALTER_PROPERTIES_BOILING_POINT_NOT_NULL"
 
-# Rename the melting_point and boiling_point columns for clarity
-$PSQL "ALTER TABLE properties RENAME COLUMN melting_point TO melting_point_celsius;"
-$PSQL "ALTER TABLE properties RENAME COLUMN boiling_point TO boiling_point_celsius;"
-echo "Renamed 'melting_point' to 'melting_point_celsius' and 'boiling_point' to 'boiling_point_celsius'."
+  # You should add the UNIQUE constraint to the symbol and name columns from the elements table
+  ALTER_ELEMENTS_SYMBOL_UNIQUE=$($PSQL "ALTER TABLE elements ADD UNIQUE(symbol);")
+  ALTER_ELEMENTS_NAME_UNIQUE=$($PSQL "ALTER TABLE elements ADD UNIQUE(name);")
+  echo "ALTER_ELEMENTS_SYMBOL_UNIQUE                : $ALTER_ELEMENTS_SYMBOL_UNIQUE"
+  echo "ALTER_ELEMENTS_NAME_UNIQUE                  : $ALTER_ELEMENTS_NAME_UNIQUE"
 
-# Ensure melting_point_celsius and boiling_point_celsius do not accept null values
-$PSQL "ALTER TABLE properties ALTER COLUMN melting_point_celsius SET NOT NULL;"
-$PSQL "ALTER TABLE properties ALTER COLUMN boiling_point_celsius SET NOT NULL;"
-echo "Set 'melting_point_celsius' and 'boiling_point_celsius' to NOT NULL."
+  # Your symbol and name columns should have the NOT NULL constraint
+  ALTER_ELEMENTS_SYMBOL_NOT_NULL=$($PSQL "ALTER TABLE elements ALTER COLUMN symbol SET NOT NULL;")
+  ALTER_ELEMENTS_SYMBOL_NOT_NULL=$($PSQL "ALTER TABLE elements ALTER COLUMN name SET NOT NULL;")
+  echo "ALTER_ELEMENTS_SYMBOL_NOT_NULL              : $ALTER_ELEMENTS_SYMBOL_NOT_NULL"
+  echo "ALTER_ELEMENTS_SYMBOL_NOT_NULL              : $ALTER_ELEMENTS_SYMBOL_NOT_NULL"
 
-# Ensure atomic_number in properties is NOT NULL
-$PSQL "ALTER TABLE properties ALTER COLUMN atomic_number SET NOT NULL;"
-echo "Set 'atomic_number' in properties to NOT NULL."
+  # You should set the atomic_number column from the properties table as a foreign key that references the column of the same name in the elements table
+  ALTER_PROPERTIES_ATOMIC_NUMBER_FOREIGN_KEY=$($PSQL "ALTER TABLE properties ADD FOREIGN KEY (atomic_number) REFERENCES elements(atomic_number);")
+  echo "ALTER_PROPERTIES_ATOMIC_NUMBER_FOREIGN_KEY  : $ALTER_PROPERTIES_ATOMIC_NUMBER_FOREIGN_KEY"
 
-# Set atomic_number in properties as a foreign key referencing elements
-$PSQL "ALTER TABLE properties ADD CONSTRAINT fk_atomic_number FOREIGN KEY (atomic_number) REFERENCES elements(atomic_number);"
-echo "Set 'atomic_number' in properties as a foreign key referencing 'atomic_number' in elements."
+  # You should create a types table that will store the three types of elements
+  CREATE_TBL_TYPES=$($PSQL "CREATE TABLE types();")
+  echo "CREATE_TBL_TYPES                            : $CREATE_TBL_TYPES"
 
-# Add UNIQUE constraint to symbol and name columns in the elements table
-$PSQL "ALTER TABLE elements ADD CONSTRAINT unique_symbol UNIQUE (symbol);"
-$PSQL "ALTER TABLE elements ADD CONSTRAINT unique_name UNIQUE (name);"
-echo "Added UNIQUE constraints to 'symbol' and 'name' columns in elements."
+  # Your types table should have a type_id column that is an integer and the primary key
+  ADD_COLUMN_TYPES_TYPE_ID=$($PSQL "ALTER TABLE types ADD COLUMN type_id SERIAL PRIMARY KEY;")
+  echo "ADD_COLUMN_TYPES_TYPE_ID                    : $ADD_COLUMN_TYPES_TYPE_ID"
 
-# Ensure symbol and name columns are NOT NULL
-$PSQL "ALTER TABLE elements ALTER COLUMN symbol SET NOT NULL;"
-$PSQL "ALTER TABLE elements ALTER COLUMN name SET NOT NULL;"
-echo "Set 'symbol' and 'name' columns to NOT NULL."
+  # Your types table should have a type column that's a VARCHAR and cannot be null. It will store the different types from the type column in the properties table
+  ADD_COLUMN_TYPES_TYPE=$($PSQL "ALTER TABLE types ADD COLUMN type VARCHAR(20) NOT NULL;")
+  echo "ADD_COLUMN_TYPES_TYPE                       : $ADD_COLUMN_TYPES_TYPE"
 
-# Create a new 'types' table to categorize elements
-$PSQL "CREATE TABLE types (type_id SERIAL PRIMARY KEY, type VARCHAR(20) NOT NULL);"
-echo "Created 'types' table with 'type_id' as primary key and 'type' as NOT NULL."
+  # You should add three rows to your types table whose values are the three different types from the properties table
+  INSERT_COLUMN_TYPES_TYPE=$($PSQL "INSERT INTO types(type) SELECT DISTINCT(type) FROM properties;")
+  echo "INSERT_COLUMN_TYPES_TYPE                    : $INSERT_COLUMN_TYPES_TYPE"
 
-# Insert unique types into the types table from existing properties
-$PSQL "INSERT INTO types(type) SELECT DISTINCT type FROM properties;"
-echo "Inserted unique types into the 'types' table."
+  # Your properties table should have a type_id foreign key column that references the type_id column from the types table. It should be an INT with the NOT NULL constraint
+  ADD_COLUMN_PROPERTIES_TYPE_ID=$($PSQL "ALTER TABLE PROPERTIES ADD COLUMN type_id INT;")
+  ADD_FOREIGN_KEY_PROPERTIES_TYPE_ID=$($PSQL "ALTER TABLE properties ADD FOREIGN KEY(type_id) REFERENCES types(type_id);")
+  echo "ADD_COLUMN_PROPERTIES_TYPE_ID               : $ADD_COLUMN_PROPERTIES_TYPE_ID"
+  echo "ADD_FOREIGN_KEY_PROPERTIES_TYPE_ID          : $ADD_FOREIGN_KEY_PROPERTIES_TYPE_ID"
 
-# Add type_id column to properties table with NOT NULL constraint
-$PSQL "ALTER TABLE properties ADD COLUMN type_id INT NOT NULL;"
-echo "Added 'type_id' column to properties table with NOT NULL constraint."
+  # Each row in your properties table should have a type_id value that links to the correct type from the types table
+  UPDATE_PROPERTIES_TYPE_ID=$($PSQL "UPDATE properties SET type_id = (SELECT type_id FROM types WHERE properties.type = types.type);")
+  ALTER_COLUMN_PROPERTIES_TYPE_ID_NOT_NULL=$($PSQL "ALTER TABLE properties ALTER COLUMN type_id SET NOT NULL;")
+  echo "UPDATE_PROPERTIES_TYPE_ID                   : $UPDATE_PROPERTIES_TYPE_ID"
+  echo "ALTER_COLUMN_PROPERTIES_TYPE_ID_NOT_NULL    : $ALTER_COLUMN_PROPERTIES_TYPE_ID_NOT_NULL"
 
-# Set type_id as a foreign key referencing types table
-$PSQL "ALTER TABLE properties ADD CONSTRAINT fk_type FOREIGN KEY (type_id) REFERENCES types(type_id);"
-echo "Set 'type_id' in properties as a foreign key referencing 'type_id' in types."
+  # You should capitalize the first letter of all the symbol values in the elements table. Be careful to only capitalize the letter and not change any others
+  UPDATE_ELEMENTS_SYMBOL=$($PSQL "UPDATE elements SET symbol=INITCAP(symbol);")
+  echo "UPDATE_ELEMENTS_SYMBOL                      : $UPDATE_ELEMENTS_SYMBOL"
 
-# Update properties with correct type_id values from the types table
-$PSQL "UPDATE properties SET type_id = (SELECT type_id FROM types WHERE properties.type = types.type);"
-echo "Updated properties with correct 'type_id' values from types."
+  # You should remove all the trailing zeros after the decimals from each row of the atomic_mass column. You may need to adjust a data type to DECIMAL for this. The final values they should be are in the atomic_mass.txt file
+  ALTER_VARCHAR_PROPERTIES_ATOMIC_MASS=$($PSQL "ALTER TABLE PROPERTIES ALTER COLUMN atomic_mass TYPE VARCHAR(9);")
+  UPDATE_FLOAT_PROPERTIES_ATOMIC_MASS=$($PSQL"UPDATE properties SET atomic_mass=CAST(atomic_mass AS FLOAT);")
+  echo "ALTER_VARCHAR_PROPERTIES_ATOMIC_MASS        : $ALTER_VARCHAR_PROPERTIES_ATOMIC_MASS"
+  echo "UPDATE_FLOAT_PROPERTIES_ATOMIC_MASS         : $UPDATE_FLOAT_PROPERTIES_ATOMIC_MASS"
 
-# Capitalize the first letter of all symbol values in the elements table
-$PSQL "UPDATE elements SET symbol = INITCAP(symbol);"
-echo "Capitalized the first letter of all 'symbol' values in elements."
+ # You should add the element with atomic number 9 to your database. Its name is Fluorine, symbol is F, mass is 18.998, melting point is -220, boiling point is -188.1, and it's a nonmetal
+  INSERT_ELEMENT_F=$($PSQL "INSERT INTO elements(atomic_number,symbol,name) VALUES(9,'F','Fluorine');")
+  INSERT_PROPERTIES_F=$($PSQL "INSERT INTO properties(atomic_number,type,melting_point_celsius,boiling_point_celsius,type_id,atomic_mass) VALUES(9,'nonmetal',-220,-188.1,3,'18.998');")
+  echo "INSERT_ELEMENT_F                            : $INSERT_ELEMENT_F"
+  echo "INSERT_PROPERTIES_F                         : $INSERT_PROPERTIES_F"
 
-# Remove trailing zeros from atomic_mass by casting to DECIMAL
-$PSQL "ALTER TABLE properties ALTER COLUMN atomic_mass TYPE DECIMAL(10, 6);"
-$PSQL "UPDATE properties SET atomic_mass = TRIM(TRAILING '0' FROM atomic_mass::TEXT)::DECIMAL;"
-echo "Removed trailing zeros from 'atomic_mass' values."
+  # You should add the element with atomic number 10 to your database. Its name is Neon, symbol is Ne, mass is 20.18, melting point is -248.6, boiling point is -246.1, and it's a nonmetal
+  INSERT_ELEMENT_NE=$($PSQL "INSERT INTO elements(atomic_number,symbol,name) VALUES(10,'Ne','Neon');")
+  INSERT_PROPERTIES_NE=$($PSQL "INSERT INTO properties(atomic_number,type,melting_point_celsius,boiling_point_celsius,type_id,atomic_mass) VALUES(10,'nonmetal',-248.6,-246.1,3,'20.18');")
+  echo "INSERT_ELEMENT_NE                           : $INSERT_ELEMENT_NE"
+  echo "INSERT_PROPERTIES_NE                        : $INSERT_PROPERTIES_NE"
 
-# Add Fluorine and Neon to the database
-$PSQL "INSERT INTO elements(atomic_number, symbol, name) VALUES(9, 'F', 'Fluorine');"
-$PSQL "INSERT INTO properties(atomic_number, type_id, melting_point_celsius, boiling_point_celsius, atomic_mass) VALUES(9, (SELECT type_id FROM types WHERE type = 'nonmetal'), -220, -188.1, 18.998);"
-echo "Added Fluorine (atomic number 9) to the database."
-
-$PSQL "INSERT INTO elements(atomic_number, symbol, name) VALUES(10, 'Ne', 'Neon');"
-$PSQL "INSERT INTO properties(atomic_number, type_id, melting_point_celsius, boiling_point_celsius, atomic_mass) VALUES(10, (SELECT type_id FROM types WHERE type = 'nonmetal'), -248.6, -246.1, 20.18);"
-echo "Added Neon (atomic number 10) to the database."
-
-# Delete non-existent element with atomic_number 1000
-$PSQL "DELETE FROM properties WHERE atomic_number = 1000;"
-$PSQL "DELETE FROM elements WHERE atomic_number = 1000;"
-echo "Deleted non-existent element with atomic_number 1000."
-
-# Drop the type column from properties table after populating type_id
-$PSQL "ALTER TABLE properties DROP COLUMN type;"
-echo "Dropped 'type' column from properties table."
-
-# Print success message
-echo "Database has been updated successfully!"
-
-#
+  # You should delete the non existent element, whose atomic_number is 1000, from the two tables
+  DELETE_PROPERTIES_1000=$($PSQL "DELETE FROM properties WHERE atomic_number=1000;")
+  DELETE_ELEMENTS_1000=$($PSQL "DELETE FROM elements WHERE atomic_number=1000;")
+  echo "DELETE_PROPERTIES_1000                      : $DELETE_PROPERTIES_1000"
+  echo "DELETE_ELEMENTS_1000                        : $DELETE_ELEMENTS_1000"
+  
+  # Your properties table should not have a type column
+  DELETE_COLUMN_PROPERTIES_TYPE=$($PSQL "ALTER TABLE properties DROP COLUMN type;")
+  echo "DELETE_COLUMN_PROPERTIES_TYPE               : $DELETE_COLUMN_PROPERTIES_TYPE"
