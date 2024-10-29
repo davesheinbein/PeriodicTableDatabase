@@ -38,7 +38,7 @@ To connect to the PostgreSQL database, use the following command in your termina
 psql --username=freecodecamp --dbname=periodic_table
 ```
 
-Then connect to the database:
+Then connect to the database (it should already exist in this instance):
 
 ```sql
 \c periodic_table
