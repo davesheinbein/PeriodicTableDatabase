@@ -5,6 +5,8 @@ This project consists of a PostgreSQL database for a periodic table, along with 
 This project is part of the [FreeCodeCamp Relational Database Certification](https://www.freecodecamp.org/learn/relational-database)
 [Periodic Table Database project](https://www.freecodecamp.org/learn/relational-database/build-a-periodic-table-database-project/build-a-periodic-table-database).
 
+---
+
 ## Table of Contents
 
 1. [Setup](#setup)
@@ -20,6 +22,8 @@ This project is part of the [FreeCodeCamp Relational Database Certification](htt
 11. [Entity-Relationship Diagram (ERD)](#entity-relationship-diagram-erd)
 12. [Acknowledgments](#acknowledgments)
 
+---
+
 ## Setup
 
 To set up the project, ensure you have PostgreSQL and Git installed on your machine. Clone this repository to your local machine and navigate to the project directory.
@@ -29,6 +33,8 @@ git clone https://github.com/davesheinbein/PeriodicTableDatabase.git
 
 cd PeriodicTableDatabase
 ```
+
+---
 
 ## Connecting to the Database
 
@@ -43,6 +49,8 @@ Then connect to the database (it should already exist in this instance):
 ```sql
 \c periodic_table
 ```
+
+---
 
 ## Printing the Tables
 
@@ -60,6 +68,8 @@ SELECT * FROM properties;
 SELECT * FROM types;
 ```
 
+---
+
 ## SQL Database Queries
 
 To compact SQL database queries into a single file, run the following command:
@@ -67,6 +77,8 @@ To compact SQL database queries into a single file, run the following command:
 ```bash
 pg_dump -cC --inserts -U freecodecamp periodic_table > periodic_table.sql
 ```
+
+---
 
 ## Git Repository Preparation
 
@@ -80,6 +92,8 @@ git checkout -b main
 git commit -m "Initial commit"
 ```
 
+---
+
 ## Shell Script Preparation
 
 Create the necessary shell script files and grant executable permissions:
@@ -91,6 +105,8 @@ chmod +x element.sh
 chmod +x fix_database.sh
 git commit -m "refactor: create & give executable permissions on element.sh"
 ```
+
+---
 
 ## Running Scripts
 
@@ -108,6 +124,8 @@ Then, run the main element query script:
 git commit -m "chore: create main program and printout the output"
 ```
 
+---
+
 ## Additional Testing
 
 You can also perform testing on the program with the following command:
@@ -116,15 +134,32 @@ You can also perform testing on the program with the following command:
 git commit -m "chore: testing the program"
 ```
 
+---
+
 ## Commit History
 
 This project maintains a clear commit history to track changes and updates made to the scripts and database structure.
 
-- **Initial commit**: Set up the Git repository.
-- **refactor**: Created shell scripts and granted executable
-  permissions.
-- **fix**: Updated the database structure.
-- **chore**: Added main program functionality and testing.
+**Examples**
+
+- **Initial commit**
+  ```bash
+  git commit -m "Initial commit: Set up the Git repository"
+  ```
+- **refactor**
+  ```bash
+  git commit -m "refactor: Created shell scripts"
+  ```
+- **fix**
+  ```bash
+  git commit -m "fix: Updated the database structure"
+  ```
+- **chore**
+  ```bash
+  git commit -m "chore: Added functionality and testing"
+  ```
+
+---
 
 ## Flowchart
 
@@ -175,6 +210,8 @@ This project maintains a clear commit history to track changes and updates made 
 +--------------------+
 ```
 
+---
+
 ## Entity-Relationship Diagram (ERD)
 
 ```plaintext
@@ -202,11 +239,34 @@ This project maintains a clear commit history to track changes and updates made 
 
 **Primary Key (PK):**
 
-- A primary key is a unique identifier for a record in a table. In the Elements table, the id column is the primary key. In the Properties table, the id column is the primary key. In the Types table, the id column is the primary key.
+**Definition:** A primary key is a unique identifier for a record in a table. It ensures that each record can be uniquely identified.
+Purpose: The primary key enforces entity integrity by ensuring that each record in the table is unique and not null. It is used to establish and enforce relationships between tables.
+
+**Usage in Tables:**
+
+- **Elements Table:** The id column is the primary key. It uniquely identifies each element in the periodic table.
+- **Properties Table:** The id column is the primary key. It uniquely identifies each set of properties associated with an element.
+  Types Table: The id column is the primary key. It uniquely identifies each type of element (e.g., metal, non-metal).
 
 **Foreign Key (FK):**
 
-- A foreign key is a field in one table that uniquely identifies a row of another table. In the Properties table, the element_id column is a foreign key that references the id column in the Elements table.
+**Definition:** A foreign key is a field (or collection of fields) in one table that uniquely identifies a row of another table. It establishes a link between the data in the two tables.
+
+**Purpose:** The foreign key enforces referential integrity by ensuring that the value in the foreign key column corresponds to a valid, existing value in the referenced primary key column. It is used to maintain the logical relationships between tables.
+
+**Usage in Tables:**
+
+- **Properties Table:** The element_id column is a foreign key that references the id column in the Elements table. This relationship ensures that each set of properties is associated with a valid element in the Elements table.
+
+**Benefits of Using Primary and Foreign Keys:**
+
+- **Data Integrity:** Ensures that the data is accurate and consistent across the database.
+- **Uniqueness:** Guarantees that each record can be uniquely identified.
+  Relationships: Establishes and maintains logical relationships between tables, enabling complex queries and data retrieval.
+- **Referential Integrity:** Prevents orphaned records and maintains the consistency of relationships between tables.
+- **Indexing:** Primary keys are automatically indexed, which improves the performance of queries involving the primary key.
+
+---
 
 ## Script Descriptions
 
@@ -221,6 +281,8 @@ In the Periodic Table Database Project, the element.sh and fix_database.sh scrip
 
 - **Purpose:** This script is intended to perform any initial setup or modifications needed to ensure the database structure and data align with expected standards or project requirements. It prepares the database by creating or updating tables, inserting missing records, and fixing data inconsistencies, which makes sure that element.sh can access and query the data without issues.
 - **Functionality:** It often includes SQL statements to adjust the schema, fix table relationships, and populate missing data entries. Running this script before element.sh is essential, as it establishes a reliable and consistent database state.
+
+---
 
 ## Acknowledgments
 
